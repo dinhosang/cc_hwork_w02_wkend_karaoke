@@ -1,14 +1,20 @@
 class Song
 
   def initialize(name, style, lyrics)
-    @name = name
-    @style = style
-    @lyrics = lyrics
+    @name = name.downcase
+    @style = style.downcase
+    @lyrics = lyrics.downcase
   end
 
 
-  def read_name
+  def check_name
     return @name
   end
+
+
+  def check_style
+    return @style
+  end
+
 
 end

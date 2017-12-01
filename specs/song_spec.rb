@@ -14,8 +14,16 @@ class TestSong < MiniTest::Test
 
 
   def test_get_name_of_song
-    actual = @song.read_name
-    expected = "life music"
+    actual = @song.check_name
+    expected = "lift music"
+    assert_equal(expected, actual)
+  end
+
+
+  def test_check_style
+    actual = @song.check_style
+    expected = "background"
+    assert_equal(expected, actual)
   end
 
 end
