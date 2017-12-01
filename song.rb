@@ -17,4 +17,9 @@ class Song
   end
 
 
+  def read_lyrics
+    return @lyrics
+  end
+
+
 end

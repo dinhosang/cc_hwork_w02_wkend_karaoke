@@ -26,4 +26,11 @@ class TestSong < MiniTest::Test
     assert_equal(expected, actual)
   end
 
+  def test_read_lyrics
+    actual = @song.read_lyrics
+    expected = "doo dah dee doo..."
+    assert_equal(expected, actual)
+  end
+
+
 end
