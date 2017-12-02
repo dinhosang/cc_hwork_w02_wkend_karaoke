@@ -16,4 +16,9 @@ class Guest
     @wallet -= amount
   end
 
+
+  def fav_song?(song)
+    return @fav_song == song
+  end
+
 end
