@@ -2,7 +2,7 @@ require('minitest/autorun')
 require('minitest/rg')
 require_relative('../guest')
 require_relative('../song')
-require_relative('../location')
+require_relative('../karaoke_room')
 
 class TestGuest < MiniTest::Test
 
@@ -38,6 +38,9 @@ class TestGuest < MiniTest::Test
     @guest = Guest.new(name, @wallet, @favourite_song)
     @second_guest = Guest.new(second_guest_name, @wallet, @favourite_song)
     @third_guest = Guest.new(third_guest_name, @wallet, @favourite_song)
+
+    @karaoke_room = KaraokeRoom.new(@place_name, 3, @songlist_with_fav)
+    @second_karaoke_room = KaraokeRoom.new(@place_name, 3, @songlist_no_fav)
   end
 
 
@@ -76,19 +79,6 @@ class TestGuest < MiniTest::Test
   end
 
 
-  def test_check_songlist_for_fav_song__present
-    actual = @guest.check_songlist(@songlist_with_fav)
-    expected = "Oh, they have 'lift music'! This is THE song!"
-    assert_equal(expected, actual)
-  end
-
-
-  def test_check_songlist_for_fav_song__not_present
-    actual = @guest.check_songlist(@songlist_no_fav)
-    assert_nil(actual)
-  end
-
-
   def test_enter_location
     @guest.enter(@location)
     actual = @location.check_occupants
@@ -104,6 +94,22 @@ class TestGuest < MiniTest::Test
     assert_equal(expected, actual)
   end
 
+
+  def test_check_songlist_for_fav_song__present
+    @guest.enter(@karaoke_room)
+
+    actual = @guest.check_song_list
+    expected = "Oh, they have 'lift music'! This is THE song!"
+
+    assert_equal(expected, actual)
+  end
+
+
+  def test_check_songlist_for_fav_song__not_present
+    @guest.enter(@second_karaoke_room)
+    actual = @guest.check_song_list
+    assert_nil(actual)
+  end
 
 
   def test_leave_to_location

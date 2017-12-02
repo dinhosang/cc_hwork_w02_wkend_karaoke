@@ -29,8 +29,11 @@ class Guest
   end
 
 
-  def check_songlist(songlist)
-    return cheer(@fav_song) if songlist.include?(@fav_song)
+  def check_song_list
+    songs = @current_location.show_songs
+    if songs.include?(@fav_song)
+      return cheer(@fav_song)
+    end
     return nil
   end
 
