@@ -11,4 +11,8 @@ class Location
   end
 
 
+  def check_occupants
+    return @occupants_list
+  end
+
 end

@@ -33,4 +33,11 @@ class TestLocation < MiniTest::Test
   end
 
 
+  def test_check_occupants
+    actual = @location.check_occupants
+    expected = []
+    assert_equal(expected, actual)
+  end
+
+
 end
