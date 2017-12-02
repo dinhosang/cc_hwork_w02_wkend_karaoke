@@ -21,4 +21,10 @@ class Guest
     return @fav_song == song
   end
 
+
+  def cheer(song)
+    song_name = song.check_name
+    return "Oh, it's '#{song_name}'! This is THE song!"
+  end
+
 end

@@ -49,8 +49,10 @@ class TestGuest < MiniTest::Test
   end
 
 
-  # def test_cheer_song__fav_song
-  #   actual = @guest.cheer()
-  # end
+  def test_cheer_song
+    actual = @guest.cheer(@favourite_song)
+    expected = "Oh, it's 'lift music'! This is THE song!"
+    assert_equal(expected, actual)
+  end
 
 end
