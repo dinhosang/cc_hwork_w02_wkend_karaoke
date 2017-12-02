@@ -24,4 +24,12 @@ class TestGuest < MiniTest::Test
   end
 
 
+  def test_use_wallet
+    @guest.use_wallet(20)
+    actual = @guest.check_wallet
+    expected = 30
+    assert_equal(expected, actual)
+  end
+
+
 end

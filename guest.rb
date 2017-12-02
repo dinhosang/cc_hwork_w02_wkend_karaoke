@@ -11,4 +11,9 @@ class Guest
     return @wallet
   end
 
+
+  def use_wallet(amount)
+    @wallet -= amount
+  end
+
 end
