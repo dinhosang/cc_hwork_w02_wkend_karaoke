@@ -33,6 +33,20 @@ class TestLocation < MiniTest::Test
   end
 
 
+  def test_check_limit__default_nil
+    actual = @location.check_limit
+    assert_nil(actual)
+  end
+
+
+  def test_check_limit__5
+    location = Location.new(@place_name, 5)
+    actual = location.check_limit
+    expected = 5
+    assert_equal(expected, actual)
+  end
+
+
   def test_check_occupants
     actual = @location.check_occupants
     expected = []
@@ -56,7 +70,7 @@ class TestLocation < MiniTest::Test
     assert_equal(expected, actual)
 
     @location.release_occupant(@first_guest)
-    
+
     actual2 = @location.check_occupants
     expected2 = []
     assert_equal(expected2, actual2)

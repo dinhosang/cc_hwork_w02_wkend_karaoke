@@ -1,13 +1,19 @@
 class Location
 
-  def initialize(name)
+  def initialize(name, limit = nil)
     @name = name
     @occupants_list = []
+    @limit = limit
   end
 
 
   def check_name
     return @name
+  end
+
+
+  def check_limit
+    return @limit
   end
 
 
