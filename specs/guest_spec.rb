@@ -27,8 +27,8 @@ class TestGuest < MiniTest::Test
 
     @place_name = "The Place"
     @second_place_name = "Another Place"
-    @location = Location.new(@place_name)
-    @second_location = Location.new(@second_place_name)
+    @location = Location.new(@place_name, 3)
+    @second_location = Location.new(@second_place_name, 1)
 
     name = "Sidney"
     second_guest_name = "Mellow"
@@ -106,7 +106,7 @@ class TestGuest < MiniTest::Test
 
 
 
-  def test_leave_location
+  def test_leave_to_location
     @guest.enter(@location)
     @second_guest.enter(@location)
     @third_guest.enter(@location)
@@ -115,17 +115,44 @@ class TestGuest < MiniTest::Test
     expected = [@guest, @second_guest, @third_guest]
     assert_equal(expected, actual)
 
-   @second_guest.leave(@location)
+    @second_guest.leave_to(@second_location)
 
-   actual = @location.check_occupants
-   expected = [@guest, @third_guest]
-   assert_equal(expected, actual)
+    actual = @location.check_occupants
+    expected = [@guest, @third_guest]
+    assert_equal(expected, actual)
   end
 
 
-  def test_move_locations
+  def test_move_locations__success
     @guest.enter(@location)
-    @guest.
+    @guest.move_to(@second_location)
+
+    actual1 = @location.check_occupants
+    expected1 = []
+    assert_equal(expected1, actual1)
+
+    actual2 = @second_location.check_occupants
+    expected2 = [@guest]
+    assert_equal(expected2, actual2)
+
+    actual3 = @guest.current_location
+    expected3 = @second_location
+    assert_equal(expected3, actual3)
+  end
+
+  def test_move_locations__failure
+    @guest.enter(@location)
+    @second_guest.enter(@location)
+    @guest.move_to(@second_location)
+    @second_guest.move_to(@second_location)
+
+    actual1 = @location.check_occupants
+    expected1 = [@second_guest]
+    assert_equal(expected1, actual1)
+
+    actual2 = @second_guest.current_location
+    expected2 = @location
+    assert_equal(expected2, actual2)
   end
 
 

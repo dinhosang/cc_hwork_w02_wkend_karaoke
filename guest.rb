@@ -36,17 +36,29 @@ class Guest
 
 
   def enter(location)
-    @current_location = location if location.receive_occupant(self)
+      location.receive_occupant(self)
+      @current_location = location
   end
 
 
-  def leave(location)
-    location.release_occupant(self)
+  def leave_to(location)
+    if location.has_space?
+      @current_location.release_occupant(self)
+      return true
+    end
+    return false
   end
 
 
   def current_location
     return @current_location
+  end
+
+
+  def move_to(location)
+    if leave_to(location)
+      enter(location)
+    end
   end
 
 
