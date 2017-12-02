@@ -20,5 +20,8 @@ class Location
     @occupants_list.push(person)
   end
 
+  def release_occupant(person)
+    @occupants_list.delete(person)
+  end
 
 end

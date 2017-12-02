@@ -48,4 +48,19 @@ class TestLocation < MiniTest::Test
   end
 
 
+  def test_release_occupant
+    @location.receive_occupant(@first_guest)
+
+    actual = @location.check_occupants
+    expected = [@first_guest]
+    assert_equal(expected, actual)
+
+    @location.release_occupant(@first_guest)
+    
+    actual2 = @location.check_occupants
+    expected2 = []
+    assert_equal(expected2, actual2)
+  end
+
+
 end
