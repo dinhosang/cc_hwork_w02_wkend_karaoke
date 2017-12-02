@@ -77,4 +77,33 @@ class TestLocation < MiniTest::Test
   end
 
 
+  def test_location_has_space__nil_true
+    @location.receive_occupant(@first_guest)
+
+    actual = @location.has_space?
+    expected = true
+    assert_equal(expected, actual)
+  end
+
+
+  def test_location_has_space__value_true
+    location = Location.new(@place_name, 2)
+    location.receive_occupant(@first_guest)
+
+    actual = location.has_space?
+    expected = true
+    assert_equal(expected, actual)
+  end
+
+
+  def test_location_has_space__false
+    location = Location.new(@place_name, 1)
+    location.receive_occupant(@first_guest)
+
+    actual = location.has_space?
+    expected = false
+    assert_equal(expected, actual)
+  end
+
+
 end

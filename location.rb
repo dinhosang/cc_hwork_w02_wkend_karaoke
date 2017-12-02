@@ -26,8 +26,17 @@ class Location
     @occupants_list.push(person)
   end
 
+
   def release_occupant(person)
     @occupants_list.delete(person)
   end
+
+
+  def has_space?
+    return true if @limit == nil
+    return true if @occupants_list.size() < @limit
+    return false
+  end
+
 
 end
