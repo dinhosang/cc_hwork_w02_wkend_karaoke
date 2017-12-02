@@ -29,8 +29,13 @@ class TestGuest < MiniTest::Test
     @location = Location.new(place_name)
 
     name = "Sidney"
+    second_guest_name = "Mellow"
+    third_guest_name = "Maddie"
+
     @wallet = 50
     @guest = Guest.new(name, @wallet, @favourite_song)
+    @second_guest = Guest.new(second_guest_name, @wallet, @favourite_song)
+    @third_guest = Guest.new(third_guest_name, @wallet, @favourite_song)
   end
 
 
@@ -88,8 +93,23 @@ class TestGuest < MiniTest::Test
     expected = [@guest]
     assert_equal(expected, actual)
   end
-  # need a method for entering and leaving room
-  # need a method for leaving bar
+
+
+  def test_leave_location
+    @guest.enter(@location)
+    @second_guest.enter(@location)
+    @third_guest.enter(@location)
+
+    actual = @location.check_occupants
+    expected = [@guest, @second_guest, @third_guest]
+    assert_equal(expected, actual)
+
+   @second_guest.leave(@location)
+
+   actual = @location.check_occupants
+   expected = [@guest, @third_guest]
+   assert_equal(expected, actual)
+  end
 
 
 end

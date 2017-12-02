@@ -38,4 +38,10 @@ class Guest
     location.receive_occupant(self)
   end
 
+
+  def leave(location)
+    location.release_occupant(self)
+  end
+  
+
 end
