@@ -34,4 +34,8 @@ class Guest
   end
 
 
+  def enter(location)
+    location.receive_occupant(self)
+  end
+
 end

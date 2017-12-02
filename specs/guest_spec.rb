@@ -2,7 +2,7 @@ require('minitest/autorun')
 require('minitest/rg')
 require_relative('../guest')
 require_relative('../song')
-
+require_relative('../location')
 
 class TestGuest < MiniTest::Test
 
@@ -24,6 +24,9 @@ class TestGuest < MiniTest::Test
 
     @songlist_with_fav = [@other_song, @favourite_song, another_song]
     @songlist_no_fav = [@other_song, another_song]
+
+    place_name = "The Place"
+    @location = Location.new(place_name)
 
     name = "Sidney"
     @wallet = 50
@@ -77,6 +80,16 @@ class TestGuest < MiniTest::Test
     actual = @guest.check_songlist(@songlist_no_fav)
     assert_nil(actual)
   end
+
+
+  def test_enter_location
+    @guest.enter(@location)
+    actual = @location.check_occupants
+    expected = [@guest]
+    assert_equal(expected, actual)
+  end
+  # need a method for entering and leaving room
+  # need a method for leaving bar
 
 
 end
