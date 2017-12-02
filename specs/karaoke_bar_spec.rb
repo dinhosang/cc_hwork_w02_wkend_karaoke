@@ -13,7 +13,8 @@ class TestKaraokeBar < MiniTest::Test
     @bar_name = "Sing Along"
     limit = 12
     till = 500
-    @bar = KaraokeBar.new(@bar_name, limit, till)
+    bar_tabs = {}
+    @bar = KaraokeBar.new(@bar_name, limit, till, bar_tabs)
   end
 
 
@@ -36,5 +37,6 @@ class TestKaraokeBar < MiniTest::Test
     expected = 500
     assert_equal(expected, actual)
   end
+
 
 end
