@@ -15,4 +15,10 @@ class Location
     return @occupants_list
   end
 
+
+  def receive_occupant(person)
+    @occupants_list.push(person)
+  end
+
+
 end
