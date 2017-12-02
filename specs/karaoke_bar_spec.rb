@@ -13,8 +13,9 @@ class TestKaraokeBar < MiniTest::Test
     @bar_name = "Sing Along"
     limit = 12
     till = 500
+    entry_fee = 20
     bar_tabs = {}
-    @bar = KaraokeBar.new(@bar_name, limit, till, bar_tabs)
+    @bar = KaraokeBar.new(@bar_name, limit, till, entry_fee, bar_tabs)
   end
 
 
