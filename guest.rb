@@ -24,7 +24,14 @@ class Guest
 
   def cheer(song)
     song_name = song.check_name
-    return "Oh, it's '#{song_name}'! This is THE song!"
+    return "Oh, they have '#{song_name}'! This is THE song!"
   end
+
+
+  def check_songlist(songlist)
+    return cheer(@fav_song) if songlist.include?(@fav_song)
+    return nil
+  end
+
 
 end

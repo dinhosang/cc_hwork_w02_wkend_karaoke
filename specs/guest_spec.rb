@@ -11,10 +11,20 @@ class TestGuest < MiniTest::Test
     style = "Background"
     lyrics = "doo dah dee doo..."
     @favourite_song = Song.new(song_name, style, lyrics)
+
     other_song_name = "drop music"
     other_style = "foreground"
     other_lyrics = "wah wah woo..."
     @other_song = Song.new(other_song_name, other_style, other_lyrics)
+
+    another_song_name = "drop music"
+    another_style = "foreground"
+    another_lyrics = "wah wah woo..."
+    another_song = Song.new(other_song_name, other_style, other_lyrics)
+
+    @songlist_with_fav = [@other_song, @favourite_song, another_song]
+    @songlist_no_fav = [@other_song, another_song]
+
     name = "Sidney"
     @wallet = 50
     @guest = Guest.new(name, @wallet, @favourite_song)
@@ -51,8 +61,22 @@ class TestGuest < MiniTest::Test
 
   def test_cheer_song
     actual = @guest.cheer(@favourite_song)
-    expected = "Oh, it's 'lift music'! This is THE song!"
+    expected = "Oh, they have 'lift music'! This is THE song!"
     assert_equal(expected, actual)
   end
+
+
+  def test_check_songlist_for_fav_song__present
+    actual = @guest.check_songlist(@songlist_with_fav)
+    expected = "Oh, they have 'lift music'! This is THE song!"
+    assert_equal(expected, actual)
+  end
+
+
+  def test_check_songlist_for_fav_song__not_present
+    actual = @guest.check_songlist(@songlist_no_fav)
+    assert_nil(actual)
+  end
+
 
 end
