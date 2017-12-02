@@ -4,6 +4,7 @@ class Guest
     @name = name
     @wallet = wallet
     @fav_song = song
+    @current_location = nil
   end
 
 
@@ -35,13 +36,18 @@ class Guest
 
 
   def enter(location)
-    location.receive_occupant(self)
+    @current_location = location if location.receive_occupant(self)
   end
 
 
   def leave(location)
     location.release_occupant(self)
   end
-  
+
+
+  def current_location
+    return @current_location
+  end
+
 
 end

@@ -25,8 +25,10 @@ class TestGuest < MiniTest::Test
     @songlist_with_fav = [@other_song, @favourite_song, another_song]
     @songlist_no_fav = [@other_song, another_song]
 
-    place_name = "The Place"
-    @location = Location.new(place_name)
+    @place_name = "The Place"
+    @second_place_name = "Another Place"
+    @location = Location.new(@place_name)
+    @second_location = Location.new(@second_place_name)
 
     name = "Sidney"
     second_guest_name = "Mellow"
@@ -95,6 +97,15 @@ class TestGuest < MiniTest::Test
   end
 
 
+  def test_check_current_location
+    @guest.enter(@location)
+    actual = @guest.current_location
+    expected = @location
+    assert_equal(expected, actual)
+  end
+
+
+
   def test_leave_location
     @guest.enter(@location)
     @second_guest.enter(@location)
@@ -109,6 +120,12 @@ class TestGuest < MiniTest::Test
    actual = @location.check_occupants
    expected = [@guest, @third_guest]
    assert_equal(expected, actual)
+  end
+
+
+  def test_move_locations
+    @guest.enter(@location)
+    @guest.
   end
 
 
