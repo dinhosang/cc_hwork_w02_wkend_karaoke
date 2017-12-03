@@ -1,9 +1,10 @@
 class Location
 
-  def initialize(name, limit = nil)
+  def initialize(name, connecting_rooms = [], limit = nil)
     @name = name
     @occupants_list = []
     @limit = limit
+    @connecting_rooms = connecting_rooms
   end
 
 
@@ -36,6 +37,11 @@ class Location
     return true if @limit == nil
     return true if @occupants_list.size() < @limit
     return false
+  end
+
+
+  def show_connecting
+    return @connecting_rooms
   end
 
 
