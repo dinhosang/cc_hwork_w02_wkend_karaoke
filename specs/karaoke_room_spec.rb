@@ -87,6 +87,6 @@ class TestKaraokeRoom < MiniTest::Test
     expected2 = @check_song_list.push(fourth_song)
     assert_equal(expected2, actual2)
   end
-  
+
 
 end

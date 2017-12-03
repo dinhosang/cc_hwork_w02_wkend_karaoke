@@ -11,6 +11,10 @@ class KaraokeBar < Location
     @entry_fee = entry_fee
     @bar_tabs = bar_tabs
     @rooms = rooms
+    @connecting_rooms = []
+    for room in @rooms
+      room_connect(room)
+    end
     @guest_list = {self => []}
     for room in @rooms
       @guest_list[room] = []
@@ -85,6 +89,11 @@ class KaraokeBar < Location
   def receive_occupant(person)
     check_in(person, self)
     @occupants_list.push(person)
+  end
+
+
+  def show_connecting
+    return @connecting_rooms
   end
 
 

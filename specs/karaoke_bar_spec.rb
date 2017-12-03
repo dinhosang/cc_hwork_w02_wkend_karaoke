@@ -108,7 +108,7 @@ class TestKaraokeBar < MiniTest::Test
   end
 
 
-  def test_check_limit__12
+  def test_check_limit__20
     actual = @bar.check_limit
     expected = 20
     assert_equal(expected, actual)
@@ -204,11 +204,26 @@ class TestKaraokeBar < MiniTest::Test
     assert_equal(expected2, actual2)
   end
 
-  def test_check_bar_has_space?
-    count = 1
-    until count == 21
-      @guest.enter(@bar)
+
+  # def test_check_in_guest__to_first_room
+  #   @guest.enter(@bar)
+  #   @guest.leave_to(@first_room)
+  # end
+
+
+  def test_show_connecting_rooms
+    actual = @bar.show_connecting
+    expected = @rooms
+    assert_equal(expected, actual)
   end
+
+
+  #
+  # def test_check_bar_has_space__false?
+  #   count = 1
+  #   until count == 21
+  #     @guest.enter(@bar)
+  # end
 
 
 end
