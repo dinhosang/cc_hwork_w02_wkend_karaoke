@@ -71,7 +71,6 @@ class TestKaraokeRoom < MiniTest::Test
 
 
   def test_add_song_to_room__song_already_there
-
     actual1 = @karaoke_room.show_songs
     expected1 = @check_song_list
     assert_equal(expected1, actual1)
@@ -87,7 +86,6 @@ class TestKaraokeRoom < MiniTest::Test
     actual2 = @karaoke_room.show_songs
     expected2 = @check_song_list.push(fourth_song)
     assert_equal(expected2, actual2)
-
   end
 
 end
