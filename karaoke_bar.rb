@@ -24,8 +24,13 @@ class KaraokeBar < Location
   end
 
 
-  def check_unused_cds
+  def check_not_used_cds
     return @unused_music_cds
+  end
+
+
+  def check_used_cds
+    return @used_cds
   end
 
 

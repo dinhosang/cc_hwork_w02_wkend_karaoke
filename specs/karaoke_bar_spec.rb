@@ -83,11 +83,17 @@ class TestKaraokeBar < MiniTest::Test
 
 
   def test_check_unused_cd_collection
-    actual = @bar.check_unused_cds
+    actual = @bar.check_not_used_cds
     expected = @cd_collection
     assert_equal(expected, actual)
   end
 
+
+  def test_check_unused_cd_collection
+    actual = @bar.check_used_cds
+    expected = []
+    assert_equal(expected, actual)
+  end
 
   def test_check_rooms_at_bar
     actual = @bar.check_rooms
