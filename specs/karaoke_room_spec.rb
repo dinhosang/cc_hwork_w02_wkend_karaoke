@@ -52,4 +52,19 @@ class TestKaraokeRoom < MiniTest::Test
   end
 
 
+  def test_add_songs_to_room_songlist
+    song_name = "la la music"
+    style = "Lindy Hop"
+    lyrics = "do wa woo wee boo..."
+
+    fourth_song = Song.new(song_name, style, lyrics)
+
+    @karaoke_room.add_song(fourth_song)
+
+    actual = @karaoke_room.show_songs.include?(fourth_song)
+    expected = true
+
+    assert_equal(expected, actual)
+  end
+
 end

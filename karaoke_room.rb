@@ -13,4 +13,8 @@ class KaraokeRoom < Location
   end
 
 
+  def add_song(song)
+      @song_list.push(song)
+  end
+
 end
