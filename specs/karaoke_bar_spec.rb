@@ -11,7 +11,6 @@ class TestKaraokeBar < MiniTest::Test
 
   def setup
     # make outside world 'room' for guests to start in
-    # method for updating songlist for all rooms at once
     # method for creating tab for guest when they first enter the bar
       # perhaps after entry fee is paid?
     # pay for drinks? better room/songs?
@@ -21,7 +20,7 @@ class TestKaraokeBar < MiniTest::Test
     # message when room is too full to check in
 
     @bar_name = "Sing Along"
-    limit = 12
+    limit = 20
     till = 500
     entry_fee = 20
     bar_tabs = {}
@@ -50,7 +49,7 @@ class TestKaraokeBar < MiniTest::Test
 
     @first_room = KaraokeRoom.new(first_room_name, 3)
 
-    @second_room = KaraokeRoom.new(second_room_name, 3)
+    @second_room = KaraokeRoom.new(second_room_name, 4)
 
     @third_room = KaraokeRoom.new(third_room_name, 3)
 
@@ -69,6 +68,12 @@ class TestKaraokeBar < MiniTest::Test
     @music_cd3 = [second_song, @fifth_song]
 
     @cd_collection = [@music_cd1, @music_cd2, @music_cd3]
+
+
+    first_guest_name = "Sidney"
+    @wallet = 50
+    @guest = Guest.new(first_guest_name, @wallet, @fourth_song)
+
 
     @rooms = [@first_room, @second_room, @third_room]
     @bar = KaraokeBar.new(@bar_name, @cd_collection, @rooms, limit, till, entry_fee, bar_tabs)
@@ -105,7 +110,7 @@ class TestKaraokeBar < MiniTest::Test
 
   def test_check_limit__12
     actual = @bar.check_limit
-    expected = 12
+    expected = 20
     assert_equal(expected, actual)
   end
 
@@ -171,5 +176,21 @@ class TestKaraokeBar < MiniTest::Test
     expected2 = @music_cd1.push(@fourth_song, @fifth_song)
     assert_equal(expected2, actual2)
   end
+
+
+  def test_check_guest_list
+    actual = @bar.check_guest_list
+    expected = {@bar => [], @first_room => [], @second_room => [], @third_room => []}
+    assert_equal(expected, actual)
+  end
+
+
+  def test_check_in_guest__to_bar
+    @bar.check_in(@guest, @bar)
+    actual = @bar.check_guest_list
+    expected = {@bar => [@guest], @first_room => [], @second_room => [], @third_room => []}
+    assert_equal(expected, actual)
+  end
+
 
 end

@@ -11,6 +11,10 @@ class KaraokeBar < Location
     @entry_fee = entry_fee
     @bar_tabs = bar_tabs
     @rooms = rooms
+    @guest_list = {self => []}
+    for room in @rooms
+      @guest_list[room] = []
+    end
   end
 
 
@@ -65,6 +69,16 @@ class KaraokeBar < Location
     for cd in @music_cds
       update_songlists_with_cd(cd, room)
     end
+  end
+
+
+  def check_guest_list
+    return @guest_list
+  end
+
+
+  def check_in(guest, location)
+    @guest_list[location].push(guest)
   end
 
 
