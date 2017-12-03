@@ -28,7 +28,7 @@ class Location
   end
 
 
-  def release_occupant(person)
+  def release_occupant(person, new_location = "not needed")
     @occupants_list.delete(person)
   end
 

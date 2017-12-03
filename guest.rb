@@ -48,7 +48,7 @@ class Guest
     for place in @current_location.show_connecting
       if place == location
         if place.has_space?
-          @current_location.release_occupant(self)
+          @current_location.release_occupant(self, location)
           return true
         end
       end

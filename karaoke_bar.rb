@@ -86,9 +86,20 @@ class KaraokeBar < Location
   end
 
 
+  def check_out(guest, location)
+    @guest_list[location].delete(guest)
+  end
+
+
   def receive_occupant(person)
     check_in(person, self)
     @occupants_list.push(person)
+  end
+
+
+  def release_occupant(person, new_location)
+    check_in(person, new_location)
+    @occupants_list.delete(person)
   end
 
 

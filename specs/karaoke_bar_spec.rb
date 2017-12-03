@@ -70,9 +70,9 @@ class TestKaraokeBar < MiniTest::Test
     @cd_collection = [@music_cd1, @music_cd2, @music_cd3]
 
 
-    first_guest_name = "Sidney"
+    guest_name = "Sidney"
     @wallet = 50
-    @guest = Guest.new(first_guest_name, @wallet, @fourth_song)
+    @guest = Guest.new(guest_name, @wallet, @fourth_song)
 
 
     @rooms = [@first_room, @second_room, @third_room]
@@ -205,10 +205,29 @@ class TestKaraokeBar < MiniTest::Test
   end
 
 
-  # def test_check_in_guest__to_first_room
-  #   @guest.enter(@bar)
-  #   @guest.leave_to(@first_room)
-  # end
+  def test_check_out_guest_from_room
+    @bar.check_in(@guest, @bar)
+    actual = @bar.check_guest_list
+    expected = {@bar => [@guest], @first_room => [], @second_room => [], @third_room => []}
+    assert_equal(expected, actual)
+    
+    @bar.check_out(@guest, @bar)
+    actual2 = @bar.check_guest_list
+    expected2 = {@bar => [], @first_room => [], @second_room => [], @third_room => []}
+    assert_equal(expected2, actual2)
+  end
+
+
+  def test_check_in_guest__to_first_room
+    @guest.enter(@bar)
+    @guest.leave_to(@first_room)
+
+    actual = @bar.check_guest_list
+
+    expected = {@bar => [@guest], @first_room => [@guest], @second_room => [], @third_room => []}
+
+    assert_equal(expected, actual)
+  end
 
 
   def test_show_connecting_rooms
