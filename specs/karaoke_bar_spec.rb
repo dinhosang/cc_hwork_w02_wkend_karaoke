@@ -193,4 +193,22 @@ class TestKaraokeBar < MiniTest::Test
   end
 
 
+  def test_bar_receive_guest_and_check_in
+    @guest.enter(@bar)
+    actual = @bar.check_guest_list
+    expected = {@bar => [@guest], @first_room => [], @second_room => [], @third_room => []}
+    assert_equal(expected, actual)
+
+    actual2 = @bar.check_occupants
+    expected2 = [@guest]
+    assert_equal(expected2, actual2)
+  end
+
+  def test_check_bar_has_space?
+    count = 1
+    until count == 21
+      @guest.enter(@bar)
+  end
+
+
 end

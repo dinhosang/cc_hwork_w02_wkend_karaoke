@@ -82,4 +82,21 @@ class KaraokeBar < Location
   end
 
 
+  def receive_occupant(person)
+    check_in(person, self)
+    @occupants_list.push(person)
+  end
+
+
+  def has_space?
+    total_occupants = 0
+    for location in @guest_list.keys()
+      room_occupants = @guest_list[location].count()
+      total_occupants += room_occupants
+    end
+    return true if total_occupants < @limit
+    return false
+  end
+
+
 end
