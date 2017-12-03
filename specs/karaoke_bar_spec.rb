@@ -52,7 +52,7 @@ class TestKaraokeBar < MiniTest::Test
 
     @second_room = KaraokeRoom.new(second_room_name, 3)
 
-    third_room = KaraokeRoom.new(third_room_name, 3)
+    @third_room = KaraokeRoom.new(third_room_name, 3)
 
 
     song_name = "la la music"
@@ -63,14 +63,14 @@ class TestKaraokeBar < MiniTest::Test
     song_name = "ra ra music"
     style = "Military Band"
     lyrics = "ra ra do ra roo..."
-    fifth_song = Song.new(song_name, style, lyrics)
+    @fifth_song = Song.new(song_name, style, lyrics)
 
     @music_cd2 = [@fourth_song, first_song]
-    @music_cd3 = [second_song, fifth_song]
+    @music_cd3 = [second_song, @fifth_song]
 
     @cd_collection = [@music_cd1, @music_cd2, @music_cd3]
 
-    @rooms = [@first_room, @second_room, third_room]
+    @rooms = [@first_room, @second_room, @third_room]
     @bar = KaraokeBar.new(@bar_name, @cd_collection, @rooms, limit, till, entry_fee, bar_tabs)
   end
 
@@ -82,18 +82,19 @@ class TestKaraokeBar < MiniTest::Test
   end
 
 
-  def test_check_unused_cd_collection
-    actual = @bar.check_not_used_cds
+  def test_check_cd_collection
+    actual = @bar.check_cds
     expected = @cd_collection
     assert_equal(expected, actual)
   end
 
 
-  def test_check_used_cd_collection
-    actual = @bar.check_used_cds
+  def test_check_setup_cd_used
+    actual = @bar.check_setup_cd_used
     expected = []
     assert_equal(expected, actual)
   end
+
 
   def test_check_rooms_at_bar
     actual = @bar.check_rooms
@@ -124,14 +125,19 @@ class TestKaraokeBar < MiniTest::Test
 
 
   def test_update_all_rooms_songlists
-    @bar.update_songlists_with_cd(@music_cd1)
+    @bar.update_songlists_with_cd(@music_cd1, @first_room)
     actual = @bar.check_room_songs(@first_room)
     expected = @music_cd1
     assert_equal(expected, actual)
 
-    @bar.update_songlists_with_cd(@music_cd2)
-    actual = @bar.check_room_songs(@second_room)
+    @bar.update_songlists_with_cd(@music_cd2, @first_room)
+    actual = @bar.check_room_songs(@first_room)
     expected = @music_cd1.push(@fourth_song)
+    assert_equal(expected, actual)
+
+    @bar.update_songlists_with_cd(@music_cd2, @second_room)
+    actual = @bar.check_room_songs(@second_room)
+    expected = @music_cd2
     assert_equal(expected, actual)
   end
 
@@ -141,10 +147,10 @@ class TestKaraokeBar < MiniTest::Test
     actual = @bar.check_room_songs(@second_room)
     expected = @music_cd1
 
-    actual2 = @bar.check_used_cds
+    actual2 = @bar.check_setup_cd_used
     expected2 = [@music_cd1]
 
-    actual3 = @bar.check_not_used_cds
+    actual3 = @bar.check_cds
     expected3 = [@music_cd2, @music_cd3]
 
     assert_equal(expected, actual)
@@ -152,5 +158,18 @@ class TestKaraokeBar < MiniTest::Test
     assert_equal(expected3, actual3)
   end
 
+
+  def test_update_songlists_with_unused_collection
+    @bar.setup_rooms_with_first_cd
+    @bar.update_songlists_with_unused_cds(@third_room)
+
+    actual = @bar.check_room_songs(@second_room)
+    expected = @music_cd1
+    assert_equal(expected, actual)
+
+    actual2 = @bar.check_room_songs(@third_room)
+    expected2 = @music_cd1.push(@fourth_song, @fifth_song)
+    assert_equal(expected2, actual2)
+  end
 
 end

@@ -5,8 +5,8 @@ class KaraokeBar < Location
 
   def initialize(name, music_collection, rooms, limit, till, entry_fee, bar_tabs)
     super(name, limit)
-    @unused_music_cds = music_collection
-    @used_cds = []
+    @music_cds = music_collection
+    @setup_cd_used = []
     @till = till
     @entry_fee = entry_fee
     @bar_tabs = bar_tabs
@@ -24,13 +24,13 @@ class KaraokeBar < Location
   end
 
 
-  def check_not_used_cds
-    return @unused_music_cds
+  def check_cds
+    return @music_cds
   end
 
 
-  def check_used_cds
-    return @used_cds
+  def check_setup_cd_used
+    return @setup_cd_used
   end
 
 
@@ -41,20 +41,31 @@ class KaraokeBar < Location
   end
 
 
-  def update_songlists_with_cd(cd)
+  def update_songlists_with_cd(cd, location)
       for room in @rooms
-        for song in cd
-          room.add_song(song)
+        if room == location
+          for song in cd
+            room.add_song(song)
+          end
         end
       end
   end
 
 
   def setup_rooms_with_first_cd
-    first_cd = @unused_music_cds.shift()
-    update_songlists_with_cd(first_cd)
-    @used_cds.push(first_cd)
+    first_cd = @music_cds.shift()
+    for room in @rooms
+      update_songlists_with_cd(first_cd, room)
+    end
+    @setup_cd_used.push(first_cd)
   end
 
-  
+
+  def update_songlists_with_unused_cds(room)
+    for cd in @music_cds
+      update_songlists_with_cd(cd, room)
+    end
+  end
+
+
 end
