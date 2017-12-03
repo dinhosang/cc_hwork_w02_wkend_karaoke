@@ -50,4 +50,11 @@ class KaraokeBar < Location
   end
 
 
+  def setup_rooms_with_first_cd
+    first_cd = @unused_music_cds.shift()
+    update_songlists_with_cd(first_cd)
+    @used_cds.push(first_cd)
+  end
+
+  
 end
