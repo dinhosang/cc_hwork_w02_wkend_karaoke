@@ -1,10 +1,10 @@
 class Location
 
-  def initialize(name, connecting_rooms = [], limit = nil)
+  def initialize(name, limit = nil)
     @name = name
     @occupants_list = []
     @limit = limit
-    @connecting_rooms = connecting_rooms
+    @connecting_rooms = []
   end
 
 
@@ -42,6 +42,13 @@ class Location
 
   def show_connecting
     return @connecting_rooms
+  end
+
+
+  def room_connect(location)
+    loc_connecting_room = location.show_connecting
+    @connecting_rooms.push(location)
+    loc_connecting_room.push(self)
   end
 
 

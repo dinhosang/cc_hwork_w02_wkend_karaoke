@@ -40,7 +40,7 @@ class TestLocation < MiniTest::Test
 
 
   def test_check_limit__5
-    location = Location.new(@place_name, [], 5)
+    location = Location.new(@place_name, 5)
     actual = location.check_limit
     expected = 5
     assert_equal(expected, actual)
@@ -87,7 +87,7 @@ class TestLocation < MiniTest::Test
 
 
   def test_location_has_space__value_true
-    location = Location.new(@place_name,[],2)
+    location = Location.new(@place_name, 2)
     location.receive_occupant(@first_guest)
 
     actual = location.has_space?
@@ -97,7 +97,7 @@ class TestLocation < MiniTest::Test
 
 
   def test_location_has_space__false
-    location = Location.new(@place_name,[],1)
+    location = Location.new(@place_name, 1)
     location.receive_occupant(@first_guest)
 
     actual = location.has_space?
@@ -105,12 +105,28 @@ class TestLocation < MiniTest::Test
     assert_equal(expected, actual)
   end
 
+
   def test_show_connecting_rooms
-    location = Location.new(@place_name, [@location], 1)
+    location = Location.new(@place_name, 1)
 
     actual = location.show_connecting
-    expected = [@location]
+    expected = []
     assert_equal(expected, actual)
+  end
+
+
+  def test_set_connecting_rooms
+    location = Location.new(@place_name, 1)
+    @location.room_connect(location)
+
+    actual = @location.show_connecting
+    expected = [location]
+
+    actual2 = location.show_connecting
+    expected2 = [@location]
+
+    assert_equal(expected, actual)
+    assert_equal(expected2, actual2)
   end
 
 
