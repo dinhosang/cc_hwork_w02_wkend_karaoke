@@ -45,9 +45,13 @@ class Guest
 
 
   def leave_to(location)
-    if location.has_space?
-      @current_location.release_occupant(self)
-      return true
+    for place in @current_location.show_connecting
+      if place == location
+        if place.has_space?
+          @current_location.release_occupant(self)
+          return true
+        end
+      end
     end
     return false
   end

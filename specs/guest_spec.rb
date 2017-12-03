@@ -113,6 +113,8 @@ class TestGuest < MiniTest::Test
 
 
   def test_leave_to_location
+   @location.room_connect(@second_location)
+
     @guest.enter(@location)
     @second_guest.enter(@location)
     @third_guest.enter(@location)
@@ -130,6 +132,8 @@ class TestGuest < MiniTest::Test
 
 
   def test_move_locations__success
+    @location.room_connect(@second_location)
+
     @guest.enter(@location)
     @guest.move_to(@second_location)
 
@@ -147,6 +151,8 @@ class TestGuest < MiniTest::Test
   end
 
   def test_move_locations__failure
+    @location.room_connect(@second_location)
+
     @guest.enter(@location)
     @second_guest.enter(@location)
     @guest.move_to(@second_location)
