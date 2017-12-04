@@ -36,7 +36,7 @@ class TestGuest < MiniTest::Test
 
     @wallet = 50
     @guest = Guest.new(name, @wallet, @favourite_song)
-    @second_guest = Guest.new(second_guest_name, @wallet, @favourite_song)
+    @second_guest = Guest.new(second_guest_name, 10, @favourite_song)
     @third_guest = Guest.new(third_guest_name, @wallet, @favourite_song)
 
     @karaoke_room = KaraokeRoom.new(@place_name, 3, @songlist_with_fav)
@@ -190,12 +190,46 @@ class TestGuest < MiniTest::Test
   end
 
 
-  def test_inquire_room__can_book
+  def test_inquire_room__cannot_book_full
     @guest.enter(@the_world)
     @guest.move_to(@bar)
     actual = @guest.can_book_room?(@second_karaoke_room)
     expected = false
     assert_equal(expected, actual)
+  end
+
+
+  def test_update_booked_room
+    @guest.booked_room = @karaoke_room
+    actual = @guest.booked_room
+    expected = @karaoke_room
+    assert_equal(expected, actual)
+  end
+
+
+  def test_book_room__success
+    @guest.enter(@the_world)
+    @guest.move_to(@bar)
+
+    actual = @guest.book_room(@karaoke_room)
+    expected = true
+    assert_equal(expected, actual)
+
+    actual = @guest.booked_room
+    expected = @karaoke_room
+    assert_equal(expected, actual)
+  end
+
+
+  def test_book_room__fail_no_money
+    @second_guest.enter(@the_world)
+    @second_guest.move_to(@bar)
+    actual = @second_guest.book_room(@karaoke_room)
+    expected = false
+    assert_equal(expected, actual)
+
+    actual = @second_guest.booked_room
+    assert_nil(actual)
   end
 
 

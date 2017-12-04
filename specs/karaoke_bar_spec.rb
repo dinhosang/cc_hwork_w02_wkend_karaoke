@@ -253,6 +253,7 @@ class TestKaraokeBar < MiniTest::Test
     expected3 = {@bar => [@guest], @first_room => [], @second_room => [], @third_room => []}
     assert_equal(expected3, actual3)
 
+    @guest.booked_room = @first_room
     @guest.move_to(@first_room)
 
     actual4 = @bar.check_occupants
@@ -275,7 +276,13 @@ class TestKaraokeBar < MiniTest::Test
 
   def test_check_guest_back_to_bar_from_1st_room
     @guest.enter(@bar)
+    @guest.booked_room = @first_room
     @guest.move_to(@first_room)
+
+    actual = @bar.check_guest_list
+    expected = {@bar => [], @first_room => [@guest], @second_room => [], @third_room => []}
+    assert_equal(expected, actual)
+
     @guest.move_to(@bar)
     actual = @bar.check_guest_list
 
@@ -307,6 +314,7 @@ class TestKaraokeBar < MiniTest::Test
     expected = false
     assert_equal(expected, actual)
 
+    @second_guest.booked_room = first_room
     @second_guest.move_to(first_room)
 
     actual = the_bar.has_space?
@@ -315,7 +323,7 @@ class TestKaraokeBar < MiniTest::Test
   end
 
 
-  def test_move_guest__fail_due_to_limit
+  def test_move_guest__fail_due_to_limit_bar
     first_room_name = "Room 1"
     second_room_name = "Room 2"
     third_room_name = "Room 3"
@@ -334,6 +342,33 @@ class TestKaraokeBar < MiniTest::Test
   end
 
 
+  def test_move_guest__fail_due_to_limit_room
+    first_room_name = "Room 1"
+    second_room_name = "Room 2"
+    third_room_name = "Room 3"
+
+    first_room = KaraokeRoom.new(first_room_name, 1)
+
+    rooms = [first_room]
+
+    the_bar = KaraokeBar.new(@bar_name, @cd_collection, rooms, 2, 10, 10, {}, @the_world)
+
+    @guest.move_to(the_bar)
+    @second_guest.move_to(the_bar)
+
+    @guest.book_room(first_room)
+    actual = @guest.move_to(first_room)
+    expected = true
+    assert_equal(expected, actual)
+
+    @second_guest.book_room(first_room)
+    actual = @second_guest.move_to(first_room)
+
+    expected = false
+    assert_equal(expected, actual)
+  end
+
+
   def test_can_allocate_room
     @guest.move_to(@bar)
 
@@ -341,5 +376,34 @@ class TestKaraokeBar < MiniTest::Test
     expected = true
     assert_equal(expected, actual)
   end
+
+
+  def test_offer_room
+    @guest.move_to(@bar)
+
+    actual = @bar.offer_room(@first_room, @guest)
+    expected = true
+    assert_equal(expected, actual)
+  end
+
+
+  def test_move_guest__fail_due_to_no_book
+    first_room_name = "Room 1"
+    second_room_name = "Room 2"
+    third_room_name = "Room 3"
+
+    first_room = KaraokeRoom.new(first_room_name, 3)
+
+    rooms = [first_room]
+
+    the_bar = KaraokeBar.new(@bar_name, @cd_collection, rooms, 1, 10, 10, {}, @the_world)
+
+    @guest.move_to(the_bar)
+
+    actual = @guest.move_to(first_room)
+    expected = false
+    assert_equal(expected, actual)
+  end
+
 
 end

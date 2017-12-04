@@ -107,7 +107,13 @@ class KaraokeBar < Location
 
 
   def release_occupant(person, new_location)
-    check_in(person, new_location)
+    if new_location != @outside
+      if person.booked_room == new_location
+        check_in(person, new_location)
+      else
+        return false
+      end
+    end
     check_out(person, self)
     @occupants_list.delete(person)
   end
@@ -143,5 +149,15 @@ class KaraokeBar < Location
     return true if room.has_space?
     return false
   end
+
+
+  def offer_room(room, guest)
+    if charge_fee(guest)
+      guest.booked_room = room
+      return true
+    end
+    return false
+  end
+
 
 end

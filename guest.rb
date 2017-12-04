@@ -4,13 +4,14 @@ require_relative('karaoke_bar')
 
 class Guest
 
-  attr_writer :current_location
+  attr_accessor :booked_room
 
   def initialize(name, wallet, song)
     @name = name
     @wallet = wallet
     @fav_song = song
     @current_location = nil
+    @booked_room = nil
   end
 
 
@@ -59,8 +60,9 @@ class Guest
     for place in @current_location.show_connecting
       if place == location
         if place.has_space?
-          @current_location.release_occupant(self, place)
-          return true
+          if @current_location.release_occupant(self, place)
+            return true
+          end
         end
       end
     end
@@ -76,6 +78,7 @@ class Guest
   def move_to(location)
     if leave_to(location)
       enter(location)
+      return true
     end
     return false
   end
@@ -91,5 +94,14 @@ class Guest
     return nil
   end
 
+
+  def book_room(room)
+    answer = can_book_room?(room)
+    if answer
+      success = @current_location.offer_room(room, self)
+      return success
+    end
+    return answer
+  end
 
 end
