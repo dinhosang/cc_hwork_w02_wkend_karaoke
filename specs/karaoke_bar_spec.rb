@@ -20,6 +20,7 @@ class TestKaraokeBar < MiniTest::Test
     # message when room is too full to check in
 
     @bar_name = "Sing Along"
+    limit = 20
     till = 500
     entry_fee = 20
     bar_tabs = {}
@@ -80,7 +81,10 @@ class TestKaraokeBar < MiniTest::Test
 
 
     @rooms = [@first_room, @second_room, @third_room]
-    @bar = KaraokeBar.new(@bar_name, @cd_collection, @rooms, 20, till, entry_fee, bar_tabs, @the_world)
+    @bar = KaraokeBar.new(@bar_name, @cd_collection, @rooms, limit, till, entry_fee, bar_tabs, @the_world)
+
+    @guest.enter(@the_world)
+    @second_guest.enter(@the_world)
   end
 
 
@@ -189,6 +193,17 @@ class TestKaraokeBar < MiniTest::Test
   end
 
 
+  def test_charge_entry_fee
+    actual1 = @bar.charge_fee(@guest)
+    expected1 = true
+
+    actual2 = @bar.till_total
+    expected2 = 520
+    assert_equal(expected1, actual1)
+    assert_equal(expected2, actual2)
+  end
+
+
   def test_check_in_guest__to_bar
     @bar.check_in(@guest, @bar)
     actual = @bar.check_guest_list
@@ -285,9 +300,6 @@ class TestKaraokeBar < MiniTest::Test
 
     the_bar = KaraokeBar.new(@bar_name, @cd_collection, rooms, 2, 10, 10, {}, @the_world)
 
-    @guest.enter(@the_world)
-    @second_guest.enter(@the_world)
-
     @guest.move_to(the_bar)
     @second_guest.move_to(the_bar)
 
@@ -314,13 +326,19 @@ class TestKaraokeBar < MiniTest::Test
 
     the_bar = KaraokeBar.new(@bar_name, @cd_collection, rooms, 1, 10, 10, {}, @the_world)
 
-    @guest.enter(@the_world)
-    @second_guest.enter(@the_world)
-
     @guest.move_to(the_bar)
 
     actual = @second_guest.move_to(the_bar)
     expected = false
+    assert_equal(expected, actual)
+  end
+
+
+  def test_can_allocate_room
+    @guest.move_to(@bar)
+
+    actual = @bar.can_allocate_room?(@first_room)
+    expected = true
     assert_equal(expected, actual)
   end
 

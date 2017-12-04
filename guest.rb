@@ -1,3 +1,7 @@
+require('pry')
+require_relative('karaoke_bar')
+
+
 class Guest
 
   attr_writer :current_location
@@ -16,7 +20,11 @@ class Guest
 
 
   def use_wallet(amount)
-    @wallet -= amount
+    if @wallet >= amount
+      @wallet -= amount
+      return true
+    end
+    return false
   end
 
 
@@ -70,6 +78,17 @@ class Guest
       enter(location)
     end
     return false
+  end
+
+
+  def can_book_room?(room)
+    if @current_location.class == KaraokeBar
+      if @current_location.can_allocate_room?(room)
+        return true
+      end
+      return false
+    end
+    return nil
   end
 
 

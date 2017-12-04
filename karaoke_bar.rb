@@ -130,4 +130,18 @@ class KaraokeBar < Location
   end
 
 
+  def charge_fee(guest)
+    if guest.use_wallet(@entry_fee)
+      @till += @entry_fee
+      return true
+    end
+    return false
+  end
+
+
+  def can_allocate_room?(room)
+    return true if room.has_space?
+    return false
+  end
+
 end
