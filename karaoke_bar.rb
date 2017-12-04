@@ -1,9 +1,10 @@
 require_relative('location')
 require('pry')
 
+
 class KaraokeBar < Location
 
-  def initialize(name, music_collection, rooms, limit, till, entry_fee, bar_tabs)
+  def initialize(name, music_collection, rooms, limit, till, entry_fee, bar_tabs, location_outside_of_bar)
     super(name, limit)
     @music_cds = music_collection
     @setup_cd_used = []
@@ -11,10 +12,13 @@ class KaraokeBar < Location
     @entry_fee = entry_fee
     @bar_tabs = bar_tabs
     @rooms = rooms
+    @outside = location_outside_of_bar
     @connecting_rooms = []
+    room_connect(@outside)
     for room in @rooms
       room_connect(room)
     end
+
     @guest_list = {self => []}
     for room in @rooms
       @guest_list[room] = []
@@ -91,14 +95,20 @@ class KaraokeBar < Location
   end
 
 
-  def receive_occupant(person)
-    check_in(person, self)
+  def receive_occupant(person, old_location)
     @occupants_list.push(person)
+    check_in(person, self)
+    if old_location != nil
+      if old_location != @outside
+        check_out(person, old_location)
+      end
+    end
   end
 
 
   def release_occupant(person, new_location)
     check_in(person, new_location)
+    check_out(person, self)
     @occupants_list.delete(person)
   end
 
@@ -110,8 +120,9 @@ class KaraokeBar < Location
 
   def has_space?
     total_occupants = 0
-    for location in @guest_list.keys()
-      room_occupants = @guest_list[location].count()
+    locations = @guest_list.keys()
+    for location in locations
+      room_occupants = @guest_list[location].length()
       total_occupants += room_occupants
     end
     return true if total_occupants < @limit

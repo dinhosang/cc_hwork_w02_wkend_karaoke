@@ -20,11 +20,11 @@ class TestKaraokeBar < MiniTest::Test
     # message when room is too full to check in
 
     @bar_name = "Sing Along"
-    limit = 20
     till = 500
     entry_fee = 20
     bar_tabs = {}
 
+    @the_world = Location.new("Outside the Bar")
 
     song_name = "lift music"
     style = "Background"
@@ -74,9 +74,13 @@ class TestKaraokeBar < MiniTest::Test
     @wallet = 50
     @guest = Guest.new(guest_name, @wallet, @fourth_song)
 
+    guest_name = "Jessie"
+    @wallet = 50
+    @second_guest = Guest.new(guest_name, @wallet, @fourth_song)
+
 
     @rooms = [@first_room, @second_room, @third_room]
-    @bar = KaraokeBar.new(@bar_name, @cd_collection, @rooms, limit, till, entry_fee, bar_tabs)
+    @bar = KaraokeBar.new(@bar_name, @cd_collection, @rooms, 20, till, entry_fee, bar_tabs, @the_world)
   end
 
 
@@ -195,6 +199,7 @@ class TestKaraokeBar < MiniTest::Test
 
   def test_bar_receive_guest_and_check_in
     @guest.enter(@bar)
+
     actual = @bar.check_guest_list
     expected = {@bar => [@guest], @first_room => [], @second_room => [], @third_room => []}
     assert_equal(expected, actual)
@@ -210,7 +215,7 @@ class TestKaraokeBar < MiniTest::Test
     actual = @bar.check_guest_list
     expected = {@bar => [@guest], @first_room => [], @second_room => [], @third_room => []}
     assert_equal(expected, actual)
-    
+
     @bar.check_out(@guest, @bar)
     actual2 = @bar.check_guest_list
     expected2 = {@bar => [], @first_room => [], @second_room => [], @third_room => []}
@@ -218,13 +223,48 @@ class TestKaraokeBar < MiniTest::Test
   end
 
 
-  def test_check_in_guest__to_first_room
+  def test_check_in_guest_to_first_room
     @guest.enter(@bar)
-    @guest.leave_to(@first_room)
 
+    actual1 = @bar.check_occupants
+    expected1 = [@guest]
+    assert_equal(expected1, actual1)
+
+    actual2 = @guest.current_location
+    expected2 = @bar
+    assert_equal(expected2, actual2)
+
+    actual3 = @bar.check_guest_list
+    expected3 = {@bar => [@guest], @first_room => [], @second_room => [], @third_room => []}
+    assert_equal(expected3, actual3)
+
+    @guest.move_to(@first_room)
+
+    actual4 = @bar.check_occupants
+    expected4 = []
+    assert_equal(expected4, actual4)
+
+    actual5 = @first_room.check_occupants
+    expected5 = [@guest]
+    assert_equal(expected5, actual5)
+
+    actual6 = @guest.current_location
+    expected6 = @first_room
+    assert_equal(expected6, actual6)
+
+    actual7 = @bar.check_guest_list
+    expected7 = {@bar => [], @first_room => [@guest], @second_room => [], @third_room => []}
+    assert_equal(expected7, actual7)
+  end
+
+
+  def test_check_guest_back_to_bar_from_1st_room
+    @guest.enter(@bar)
+    @guest.move_to(@first_room)
+    @guest.move_to(@bar)
     actual = @bar.check_guest_list
 
-    expected = {@bar => [@guest], @first_room => [@guest], @second_room => [], @third_room => []}
+    expected = {@bar => [@guest], @first_room => [], @second_room => [], @third_room => []}
 
     assert_equal(expected, actual)
   end
@@ -232,17 +272,56 @@ class TestKaraokeBar < MiniTest::Test
 
   def test_show_connecting_rooms
     actual = @bar.show_connecting
-    expected = @rooms
+    expected = @rooms.unshift(@the_world)
     assert_equal(expected, actual)
   end
 
 
-  #
-  # def test_check_bar_has_space__false?
-  #   count = 1
-  #   until count == 21
-  #     @guest.enter(@bar)
-  # end
+  def test_check_bar_has_space__false?
+    first_room_name = "Room 1"
+    first_room = KaraokeRoom.new(first_room_name, 3)
 
+    rooms = [first_room]
+
+    the_bar = KaraokeBar.new(@bar_name, @cd_collection, rooms, 2, 10, 10, {}, @the_world)
+
+    @guest.enter(@the_world)
+    @second_guest.enter(@the_world)
+
+    @guest.move_to(the_bar)
+    @second_guest.move_to(the_bar)
+
+    actual = the_bar.has_space?
+    expected = false
+    assert_equal(expected, actual)
+
+    @second_guest.move_to(first_room)
+
+    actual = the_bar.has_space?
+    expected = false
+    assert_equal(expected, actual)
+  end
+
+
+  def test_move_guest__fail_due_to_limit
+    first_room_name = "Room 1"
+    second_room_name = "Room 2"
+    third_room_name = "Room 3"
+
+    first_room = KaraokeRoom.new(first_room_name, 3)
+
+    rooms = [first_room]
+
+    the_bar = KaraokeBar.new(@bar_name, @cd_collection, rooms, 1, 10, 10, {}, @the_world)
+
+    @guest.enter(@the_world)
+    @second_guest.enter(@the_world)
+
+    @guest.move_to(the_bar)
+
+    actual = @second_guest.move_to(the_bar)
+    expected = false
+    assert_equal(expected, actual)
+  end
 
 end

@@ -1,5 +1,7 @@
 class Guest
 
+  attr_writer :current_location
+
   def initialize(name, wallet, song)
     @name = name
     @wallet = wallet
@@ -39,8 +41,9 @@ class Guest
 
 
   def enter(location)
-      location.receive_occupant(self)
-      @current_location = location
+    previous_location = @current_location
+    location.receive_occupant(self, previous_location)
+    @current_location = location
   end
 
 
@@ -48,7 +51,7 @@ class Guest
     for place in @current_location.show_connecting
       if place == location
         if place.has_space?
-          @current_location.release_occupant(self, location)
+          @current_location.release_occupant(self, place)
           return true
         end
       end
@@ -66,6 +69,7 @@ class Guest
     if leave_to(location)
       enter(location)
     end
+    return false
   end
 
 

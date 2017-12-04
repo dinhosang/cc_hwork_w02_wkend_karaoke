@@ -23,7 +23,7 @@ class Location
   end
 
 
-  def receive_occupant(person)
+  def receive_occupant(person, old_location = "not needed")
     @occupants_list.push(person)
   end
 
