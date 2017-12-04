@@ -4,12 +4,13 @@ require('pry')
 
 class KaraokeBar < Location
 
-  def initialize(name, music_collection, rooms, limit, till, entry_fee, bar_tabs, location_outside_of_bar)
+  def initialize(name, music_collection, rooms, limit, till, entry_fee, extra_songs_fee, bar_tabs, location_outside_of_bar)
     super(name, limit)
     @music_cds = music_collection
     @setup_cd_used = []
     @till = till
     @entry_fee = entry_fee
+    @extra_songs_fee = extra_songs_fee
     @bar_tabs = bar_tabs
     @rooms = rooms
     @outside = location_outside_of_bar
@@ -136,9 +137,9 @@ class KaraokeBar < Location
   end
 
 
-  def charge_fee(guest)
-    if guest.use_wallet(@entry_fee)
-      @till += @entry_fee
+  def charge_fee(guest, amount)
+    if guest.use_wallet(amount)
+      @till += amount
       return true
     end
     return false
@@ -152,12 +153,31 @@ class KaraokeBar < Location
 
 
   def offer_room(room, guest)
-    if charge_fee(guest)
+    if charge_fee(guest, @entry_fee)
       guest.booked_room = room
       return true
     end
     return false
   end
 
+
+  def offer_more_songs(room, guest)
+    remaining_music = []
+    music_in_room = room.show_songs
+    for cd in @music_cds
+      remaining_music.concat(cd)
+    end
+    for song in remaining_music
+      if !music_in_room.include?(song)
+        if charge_fee(guest, @extra_songs_fee)
+          update_songlists_with_unused_cds(room)
+          return true
+        else
+          return false
+        end
+      end
+    end
+    return nil
+  end
 
 end

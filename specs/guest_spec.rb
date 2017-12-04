@@ -3,6 +3,7 @@ require('minitest/rg')
 require_relative('../guest')
 require_relative('../song')
 require_relative('../karaoke_room')
+require_relative('../karaoke_bar')
 
 class TestGuest < MiniTest::Test
 
@@ -25,6 +26,8 @@ class TestGuest < MiniTest::Test
     @songlist_with_fav = [@other_song, @favourite_song, another_song]
     @songlist_no_fav = [@other_song, another_song]
 
+    @cds = [@songlist_with_fav, @songlist_no_fav]
+
     @place_name = "The Place"
     @second_place_name = "Another Place"
     @location = Location.new(@place_name, 3)
@@ -46,7 +49,11 @@ class TestGuest < MiniTest::Test
 
     @the_world = Location.new("Outside the Bar")
 
-    @bar = KaraokeBar.new(@bar_name, @cd_collection, @rooms, 20, 200, 20, {}, @the_world)
+    @bar = KaraokeBar.new(@bar_name, @cd_collection, @rooms, 20, 200, 20, 10, {}, @the_world)
+
+    @third_karaoke_room = KaraokeRoom.new(@place_name, 3)
+
+    @the_bar = KaraokeBar.new(@bar_name, @cds, [@third_karaoke_room], 20, 200, 20, 10, {}, @the_world)
   end
 
 
@@ -230,6 +237,19 @@ class TestGuest < MiniTest::Test
 
     actual = @second_guest.booked_room
     assert_nil(actual)
+  end
+
+
+  def test_request_more_songs
+    @guest.enter(@the_world)
+    @guest.move_to(@the_bar)
+
+    @guest.book_room(@third_karaoke_room)
+    @guest.move_to(@third_karaoke_room)
+
+    actual = @guest.request_more_songs
+    expected = true
+    assert_equal(expected, actual)
   end
 
 

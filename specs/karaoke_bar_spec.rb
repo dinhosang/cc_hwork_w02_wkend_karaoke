@@ -10,19 +10,17 @@ require_relative('../karaoke_bar')
 class TestKaraokeBar < MiniTest::Test
 
   def setup
-    # make outside world 'room' for guests to start in
     # method for creating tab for guest when they first enter the bar
       # perhaps after entry fee is paid?
     # pay for drinks? better room/songs?
     # method for customer to pay tab when they leave => thing for if they can't
-    # check-in list of where guests are
-    # check-out of list when guests leave a room
     # message when room is too full to check in
 
     @bar_name = "Sing Along"
     limit = 20
     till = 500
     entry_fee = 20
+    extra_songs_fee = 10
     bar_tabs = {}
 
     @the_world = Location.new("Outside the Bar")
@@ -81,7 +79,7 @@ class TestKaraokeBar < MiniTest::Test
 
 
     @rooms = [@first_room, @second_room, @third_room]
-    @bar = KaraokeBar.new(@bar_name, @cd_collection, @rooms, limit, till, entry_fee, bar_tabs, @the_world)
+    @bar = KaraokeBar.new(@bar_name, @cd_collection, @rooms, limit, till, entry_fee, extra_songs_fee, bar_tabs, @the_world)
 
     @guest.enter(@the_world)
     @second_guest.enter(@the_world)
@@ -194,7 +192,7 @@ class TestKaraokeBar < MiniTest::Test
 
 
   def test_charge_entry_fee
-    actual1 = @bar.charge_fee(@guest)
+    actual1 = @bar.charge_fee(@guest, 20)
     expected1 = true
 
     actual2 = @bar.till_total
@@ -305,7 +303,7 @@ class TestKaraokeBar < MiniTest::Test
 
     rooms = [first_room]
 
-    the_bar = KaraokeBar.new(@bar_name, @cd_collection, rooms, 2, 10, 10, {}, @the_world)
+    the_bar = KaraokeBar.new(@bar_name, @cd_collection, rooms, 2, 10, 10, 10, {}, @the_world)
 
     @guest.move_to(the_bar)
     @second_guest.move_to(the_bar)
@@ -332,7 +330,7 @@ class TestKaraokeBar < MiniTest::Test
 
     rooms = [first_room]
 
-    the_bar = KaraokeBar.new(@bar_name, @cd_collection, rooms, 1, 10, 10, {}, @the_world)
+    the_bar = KaraokeBar.new(@bar_name, @cd_collection, rooms, 1, 10, 10, 10, {}, @the_world)
 
     @guest.move_to(the_bar)
 
@@ -351,7 +349,7 @@ class TestKaraokeBar < MiniTest::Test
 
     rooms = [first_room]
 
-    the_bar = KaraokeBar.new(@bar_name, @cd_collection, rooms, 2, 10, 10, {}, @the_world)
+    the_bar = KaraokeBar.new(@bar_name, @cd_collection, rooms, 2, 10, 10, 10, {}, @the_world)
 
     @guest.move_to(the_bar)
     @second_guest.move_to(the_bar)
@@ -396,13 +394,41 @@ class TestKaraokeBar < MiniTest::Test
 
     rooms = [first_room]
 
-    the_bar = KaraokeBar.new(@bar_name, @cd_collection, rooms, 1, 10, 10, {}, @the_world)
+    the_bar = KaraokeBar.new(@bar_name, @cd_collection, rooms, 1, 10, 10, 10, {}, @the_world)
 
     @guest.move_to(the_bar)
 
     actual = @guest.move_to(first_room)
     expected = false
     assert_equal(expected, actual)
+  end
+
+
+  def test_offer_more_songs__success
+    actual = @bar.offer_more_songs(@first_room, @guest)
+    expected = true
+    assert_equal(expected, actual)
+  end
+
+  def test_offer_more_songs__fail_no_money
+    guest_name = "Jessie"
+    wallet = 5
+    guest = Guest.new(guest_name, wallet, @fourth_song)
+
+    actual = @bar.offer_more_songs(@first_room, guest)
+    expected = false
+    assert_equal(expected, actual)
+  end
+
+  def test_offer_more_songs__fail_no_more_music
+    @bar.update_songlists_with_unused_cds(@first_room)
+
+    guest_name = "Jessie"
+    wallet = 5
+    guest = Guest.new(guest_name, wallet, @fourth_song)
+
+    actual = @bar.offer_more_songs(@first_room, guest)
+    assert_nil(actual)
   end
 
 

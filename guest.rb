@@ -1,5 +1,4 @@
 require('pry')
-require_relative('karaoke_bar')
 
 
 class Guest
@@ -103,5 +102,19 @@ class Guest
     end
     return answer
   end
+
+
+  def request_more_songs
+    if @current_location.class == KaraokeRoom
+      connect_rooms = @current_location.show_connecting
+      for room in connect_rooms
+        if room.class == KaraokeBar
+          answer = room.offer_more_songs(@current_location, self)
+          return answer
+        end
+      end
+    end
+  end
+
 
 end
