@@ -5,14 +5,14 @@ require_relative('location')
 
 class KaraokeBar < Location
 
-  def initialize(name, music_collection, rooms, guest_limit, till, entry_fee, extra_songs_fee, bar_tabs, location_outside_of_bar)
+  def initialize(name, music_collection, rooms, guest_limit, till, entry_fee, extra_songs_fee, location_outside_of_bar)
     super(name, guest_limit)
     @music_cds = music_collection
     @setup_cd_used = []
     @till = till
     @entry_fee = entry_fee
     @extra_songs_fee = extra_songs_fee
-    @bar_tabs = bar_tabs
+    @bar_tabs = {}
     @rooms = rooms
     @outside = location_outside_of_bar
     @connecting_rooms = []

@@ -49,11 +49,11 @@ class TestGuest < MiniTest::Test
 
     @the_world = Location.new("Outside the Bar")
 
-    @bar = KaraokeBar.new(@bar_name, @cds, @rooms, 20, 200, 20, 10, {}, @the_world)
+    @bar = KaraokeBar.new(@bar_name, @cds, @rooms, 20, 200, 20, 10, @the_world)
 
     @third_karaoke_room = KaraokeRoom.new(@place_name, 3)
 
-    @the_bar = KaraokeBar.new(@bar_name, @cds, [@third_karaoke_room], 20, 200, 20, 10, {}, @the_world)
+    @the_bar = KaraokeBar.new(@bar_name, @cds, [@third_karaoke_room], 20, 200, 20, 10, @the_world)
   end
 
 

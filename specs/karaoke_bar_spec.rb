@@ -20,7 +20,6 @@ class TestKaraokeBar < MiniTest::Test
     till = 500
     entry_fee = 20
     extra_songs_fee = 10
-    bar_tabs = {}
 
     @the_world = Location.new("Outside the Bar")
 
@@ -78,7 +77,7 @@ class TestKaraokeBar < MiniTest::Test
 
 
     @rooms = [@first_room, @second_room, @third_room]
-    @bar = KaraokeBar.new(@bar_name, @cd_collection, @rooms, limit, till, entry_fee, extra_songs_fee, bar_tabs, @the_world)
+    @bar = KaraokeBar.new(@bar_name, @cd_collection, @rooms, limit, till, entry_fee, extra_songs_fee, @the_world)
 
     @guest.enter(@the_world)
     @second_guest.enter(@the_world)
@@ -302,7 +301,7 @@ class TestKaraokeBar < MiniTest::Test
 
     rooms = [first_room]
 
-    the_bar = KaraokeBar.new(@bar_name, @cd_collection, rooms, 2, 10, 10, 10, {}, @the_world)
+    the_bar = KaraokeBar.new(@bar_name, @cd_collection, rooms, 2, 10, 10, 10, @the_world)
 
     @guest.move_to(the_bar)
     @second_guest.move_to(the_bar)
@@ -329,7 +328,7 @@ class TestKaraokeBar < MiniTest::Test
 
     rooms = [first_room]
 
-    the_bar = KaraokeBar.new(@bar_name, @cd_collection, rooms, 1, 10, 10, 10, {}, @the_world)
+    the_bar = KaraokeBar.new(@bar_name, @cd_collection, rooms, 1, 10, 10, 10, @the_world)
 
     @guest.move_to(the_bar)
 
@@ -347,7 +346,7 @@ class TestKaraokeBar < MiniTest::Test
 
     rooms = [first_room]
 
-    the_bar = KaraokeBar.new(@bar_name, @cd_collection, rooms, 2, 10, 10, 10, {}, @the_world)
+    the_bar = KaraokeBar.new(@bar_name, @cd_collection, rooms, 2, 10, 10, 10, @the_world)
 
     @guest.move_to(the_bar)
     @second_guest.move_to(the_bar)
@@ -373,7 +372,7 @@ class TestKaraokeBar < MiniTest::Test
 
     rooms = [first_room]
 
-    the_bar = KaraokeBar.new(@bar_name, @cd_collection, rooms, 1, 10, 10, 10, {}, @the_world)
+    the_bar = KaraokeBar.new(@bar_name, @cd_collection, rooms, 1, 10, 10, 10, @the_world)
 
     @guest.move_to(the_bar)
 
