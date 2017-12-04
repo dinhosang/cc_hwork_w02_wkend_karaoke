@@ -49,7 +49,7 @@ class TestGuest < MiniTest::Test
 
     @the_world = Location.new("Outside the Bar")
 
-    @bar = KaraokeBar.new(@bar_name, @cd_collection, @rooms, 20, 200, 20, 10, {}, @the_world)
+    @bar = KaraokeBar.new(@bar_name, @cds, @rooms, 20, 200, 20, 10, {}, @the_world)
 
     @third_karaoke_room = KaraokeRoom.new(@place_name, 3)
 
@@ -116,7 +116,6 @@ class TestGuest < MiniTest::Test
 
     assert_equal(expected, actual)
   end
-
 
   def test_check_songlist_for_fav_song__not_present
     @guest.enter(@second_karaoke_room)
@@ -189,13 +188,11 @@ class TestGuest < MiniTest::Test
     assert_equal(expected, actual)
   end
 
-
   def test_inquire_room__cannot_book_not_bar
     @guest.enter(@the_world)
     actual = @guest.can_book_room?(@karaoke_room)
     assert_nil(actual)
   end
-
 
   def test_inquire_room__cannot_book_full
     @guest.enter(@the_world)
@@ -226,7 +223,6 @@ class TestGuest < MiniTest::Test
     expected = @karaoke_room
     assert_equal(expected, actual)
   end
-
 
   def test_book_room__fail_no_money
     @second_guest.enter(@the_world)

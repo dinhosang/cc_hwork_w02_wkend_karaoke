@@ -2,10 +2,11 @@ require('pry')
 
 require_relative('location')
 
+
 class KaraokeRoom < Location
 
-  def initialize(name, limit, song_list = [])
-    super(name, limit)
+  def initialize(name, guest_limit, song_list = [])
+    super(name, guest_limit)
     @songlist = song_list
   end
 

@@ -1,10 +1,10 @@
 require('minitest/autorun')
 require('minitest/rg')
+
 require_relative('../guest')
 require_relative('../song')
 require_relative('../karaoke_room')
 require_relative('../karaoke_bar')
-
 
 
 class TestKaraokeBar < MiniTest::Test
@@ -190,7 +190,7 @@ class TestKaraokeBar < MiniTest::Test
   end
 
 
-  def test_charge_entry_fee
+  def test_simulate_charging_entry_fee
     actual1 = @bar.charge_fee(@guest, 20)
     expected1 = true
 
@@ -235,7 +235,7 @@ class TestKaraokeBar < MiniTest::Test
   end
 
 
-  def test_check_in_guest_to_first_room
+  def test_move_and_check_in_guest_to_first_room
     @guest.enter(@bar)
 
     actual1 = @bar.check_occupants
@@ -271,7 +271,7 @@ class TestKaraokeBar < MiniTest::Test
   end
 
 
-  def test_check_guest_back_to_bar_from_1st_room
+  def test_move_guest_back_to_bar_from_1st_room
     @guest.enter(@bar)
     @guest.booked_room = @first_room
     @guest.move_to(@first_room)
@@ -338,7 +338,6 @@ class TestKaraokeBar < MiniTest::Test
     assert_equal(expected, actual)
   end
 
-
   def test_move_guest__fail_due_to_limit_room
     first_room_name = "Room 1"
     second_room_name = "Room 2"
@@ -365,25 +364,6 @@ class TestKaraokeBar < MiniTest::Test
     assert_equal(expected, actual)
   end
 
-
-  def test_can_allocate_room
-    @guest.move_to(@bar)
-
-    actual = @bar.can_allocate_room?(@first_room)
-    expected = true
-    assert_equal(expected, actual)
-  end
-
-
-  def test_offer_room
-    @guest.move_to(@bar)
-
-    actual = @bar.offer_room(@first_room, @guest)
-    expected = true
-    assert_equal(expected, actual)
-  end
-
-
   def test_move_guest__fail_due_to_no_book
     first_room_name = "Room 1"
     second_room_name = "Room 2"
@@ -399,6 +379,24 @@ class TestKaraokeBar < MiniTest::Test
 
     actual = @guest.move_to(first_room)
     expected = false
+    assert_equal(expected, actual)
+  end
+
+
+  def test_can_allocate_room
+    @guest.move_to(@bar)
+
+    actual = @bar.can_allocate_room?(@first_room)
+    expected = true
+    assert_equal(expected, actual)
+  end
+
+
+  def test_offer_room
+    @guest.move_to(@bar)
+
+    actual = @bar.offer_room(@first_room, @guest)
+    expected = true
     assert_equal(expected, actual)
   end
 

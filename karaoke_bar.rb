@@ -1,11 +1,12 @@
-require_relative('location')
 require('pry')
+
+require_relative('location')
 
 
 class KaraokeBar < Location
 
-  def initialize(name, music_collection, rooms, limit, till, entry_fee, extra_songs_fee, bar_tabs, location_outside_of_bar)
-    super(name, limit)
+  def initialize(name, music_collection, rooms, guest_limit, till, entry_fee, extra_songs_fee, bar_tabs, location_outside_of_bar)
+    super(name, guest_limit)
     @music_cds = music_collection
     @setup_cd_used = []
     @till = till

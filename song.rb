@@ -1,5 +1,3 @@
-
-
 class Song
 
   def initialize(name, style, lyrics)
