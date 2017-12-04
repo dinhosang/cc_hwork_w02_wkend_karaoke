@@ -12,9 +12,8 @@ class TestKaraokeBar < MiniTest::Test
   def setup
     # method for creating tab for guest when they first enter the bar
       # perhaps after entry fee is paid?
-    # pay for drinks? better room/songs?
+    # pay for drinks?
     # method for customer to pay tab when they leave => thing for if they can't
-    # message when room is too full to check in
 
     @bar_name = "Sing Along"
     limit = 20
